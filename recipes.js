@@ -29,15 +29,11 @@ function loadRecipe(recipeId) {
         <div class="recipe-body">
             <div class="ingredients-section">
                 <h3>Ingredients</h3>
-                <ul class="ingredients-list">
-                    ${recipe.ingredients.map(ing => `<li>${ing}</li>`).join('')}
-                </ul>
+                <ul class="ingredients-list">${recipe.ingredients.map(ing => `<li>${ing}</li>`).join('')}</ul>
             </div>
             <div class="method-section">
                 <h3>Method</h3>
-                <ol class="method-list">
-                    ${recipe.instructions.map(step => `<li>${step}</li>`).join('')}
-                </ol>
+                <ol class="method-list">${recipe.instructions.map(step => `<li>${step}</li>`).join('')}</ol>
             </div>
         </div>
     `;
@@ -46,7 +42,7 @@ function loadRecipe(recipeId) {
 function updateSidebar() {
     listElement.innerHTML = '';
 
-    // Home link logic
+    // Home link
     if (currentSearchTerm === "" || "chào mừng".includes(currentSearchTerm)) {
         const homeLi = document.createElement('li');
         homeLi.className = currentActiveId === "home" ? 'active-bookmark' : '';
@@ -60,7 +56,7 @@ function updateSidebar() {
         listElement.appendChild(homeLi);
     }
 
-    // Recipe list logic
+    // Recipes
     Object.keys(recipeDB).forEach((key, index) => {
         const recipe = recipeDB[key];
         const match = recipe.title.toLowerCase().includes(currentSearchTerm) ||
@@ -69,10 +65,7 @@ function updateSidebar() {
         if (match) {
             const li = document.createElement('li');
             li.className = currentActiveId === key ? 'active-bookmark' : '';
-
-            // Add this line to delay each item slightly based on its position
             li.style.animationDelay = `${index * 0.05}s`;
-
             li.innerHTML = `<span class="bookmark-icon">🔖</span> ${recipe.title}`;
             li.onclick = () => {
                 currentActiveId = key;
