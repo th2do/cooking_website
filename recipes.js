@@ -1,3 +1,5 @@
+const sidebar = document.getElementById('sidebar');
+const dragHandle = document.getElementById('dragHandle');
 const listElement = document.getElementById('recipe-list');
 const welcomeScreen = document.getElementById('main-page-welcome');
 const recipeDetailsContainer = document.getElementById('recipe-details-container');
@@ -7,6 +9,7 @@ const clearSearchBtn = document.getElementById('clear-search');
 let currentActiveId = "home";
 let currentSearchTerm = "";
 
+// --- RECIPE RENDERING ---
 function loadRecipe(recipeId) {
     const recipe = recipeDB[recipeId];
     if (!recipe) return;
@@ -39,10 +42,11 @@ function loadRecipe(recipeId) {
     `;
 }
 
+// --- SIDEBAR UPDATE ---
 function updateSidebar() {
     listElement.innerHTML = '';
 
-    // Home link
+    // Home Link
     if (currentSearchTerm === "" || "chào mừng".includes(currentSearchTerm)) {
         const homeLi = document.createElement('li');
         homeLi.className = currentActiveId === "home" ? 'active-bookmark' : '';
@@ -56,7 +60,7 @@ function updateSidebar() {
         listElement.appendChild(homeLi);
     }
 
-    // Recipes
+    // Recipe List
     Object.keys(recipeDB).forEach((key, index) => {
         const recipe = recipeDB[key];
         const match = recipe.title.toLowerCase().includes(currentSearchTerm) ||
@@ -77,6 +81,7 @@ function updateSidebar() {
     });
 }
 
+// --- SEARCH LISTENERS ---
 searchInput.addEventListener('input', (e) => {
     currentSearchTerm = e.target.value.toLowerCase().trim();
     clearSearchBtn.classList.toggle('hidden', currentSearchTerm.length === 0);
@@ -91,4 +96,26 @@ clearSearchBtn.addEventListener('click', () => {
     searchInput.focus();
 });
 
+// --- RESIZER LOGIC ---
+dragHandle.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    document.body.classList.add('resizing');
+
+    const doDrag = (e) => {
+        const newWidth = e.clientX;
+        // The CSS min/max width handle the constraints automatically
+        sidebar.style.width = `${newWidth}px`;
+    };
+
+    const stopDrag = () => {
+        document.body.classList.remove('resizing');
+        document.removeEventListener('mousemove', doDrag);
+        document.removeEventListener('mouseup', stopDrag);
+    };
+
+    document.addEventListener('mousemove', doDrag);
+    document.addEventListener('mouseup', stopDrag);
+});
+
+// Initialize
 updateSidebar();
