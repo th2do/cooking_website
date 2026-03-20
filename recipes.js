@@ -1,0 +1,101 @@
+const listElement = document.getElementById('recipe-list');
+const welcomeScreen = document.getElementById('main-page-welcome');
+const recipeDetailsContainer = document.getElementById('recipe-details-container');
+const searchInput = document.getElementById('recipe-search');
+const clearSearchBtn = document.getElementById('clear-search');
+
+let currentActiveId = "home";
+let currentSearchTerm = "";
+
+function loadRecipe(recipeId) {
+    const recipe = recipeDB[recipeId];
+    if (!recipe) return;
+
+    welcomeScreen.classList.add('hidden');
+    recipeDetailsContainer.classList.remove('hidden');
+    document.getElementById('recipe-display').scrollTop = 0;
+
+    recipeDetailsContainer.innerHTML = `
+        <div class="recipe-header">
+            <img src="${recipe.image}" alt="${recipe.title}" class="recipe-main-img">
+            <div class="recipe-header-text">
+                <div class="tag-container">
+                    ${recipe.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                </div>
+                <h1>${recipe.title}</h1>
+                <p class="recipe-description">${recipe.description}</p>
+            </div>
+        </div>
+        <div class="recipe-body">
+            <div class="ingredients-section">
+                <h3>Ingredients</h3>
+                <ul class="ingredients-list">
+                    ${recipe.ingredients.map(ing => `<li>${ing}</li>`).join('')}
+                </ul>
+            </div>
+            <div class="method-section">
+                <h3>Method</h3>
+                <ol class="method-list">
+                    ${recipe.instructions.map(step => `<li>${step}</li>`).join('')}
+                </ol>
+            </div>
+        </div>
+    `;
+}
+
+function updateSidebar() {
+    listElement.innerHTML = '';
+
+    // Home link logic
+    if (currentSearchTerm === "" || "chào mừng".includes(currentSearchTerm)) {
+        const homeLi = document.createElement('li');
+        homeLi.className = currentActiveId === "home" ? 'active-bookmark' : '';
+        homeLi.innerHTML = `<span class="bookmark-icon">🏠</span> Chào mừng`;
+        homeLi.onclick = () => {
+            currentActiveId = "home";
+            welcomeScreen.classList.remove('hidden');
+            recipeDetailsContainer.classList.add('hidden');
+            updateSidebar();
+        };
+        listElement.appendChild(homeLi);
+    }
+
+    // Recipe list logic
+    Object.keys(recipeDB).forEach((key, index) => {
+        const recipe = recipeDB[key];
+        const match = recipe.title.toLowerCase().includes(currentSearchTerm) ||
+            recipe.tags.some(t => t.toLowerCase().includes(currentSearchTerm));
+
+        if (match) {
+            const li = document.createElement('li');
+            li.className = currentActiveId === key ? 'active-bookmark' : '';
+
+            // Add this line to delay each item slightly based on its position
+            li.style.animationDelay = `${index * 0.05}s`;
+
+            li.innerHTML = `<span class="bookmark-icon">🔖</span> ${recipe.title}`;
+            li.onclick = () => {
+                currentActiveId = key;
+                loadRecipe(key);
+                updateSidebar();
+            };
+            listElement.appendChild(li);
+        }
+    });
+}
+
+searchInput.addEventListener('input', (e) => {
+    currentSearchTerm = e.target.value.toLowerCase().trim();
+    clearSearchBtn.classList.toggle('hidden', currentSearchTerm.length === 0);
+    updateSidebar();
+});
+
+clearSearchBtn.addEventListener('click', () => {
+    searchInput.value = '';
+    currentSearchTerm = '';
+    clearSearchBtn.classList.add('hidden');
+    updateSidebar();
+    searchInput.focus();
+});
+
+updateSidebar();
