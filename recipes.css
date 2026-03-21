@@ -28,7 +28,7 @@ body {
     display: none !important;
 }
 
-/* --- SIDEBAR --- */
+/* SIDEBAR */
 .sidebar {
     width: 320px;
     min-width: 200px;
@@ -61,7 +61,7 @@ body {
     margin-top: 5px;
 }
 
-/* SEARCH */
+/* SEARCH & FILTERS */
 .search-container {
     padding: 1.5rem;
     background: rgba(0, 0, 0, 0.2);
@@ -92,7 +92,15 @@ body {
     cursor: pointer;
 }
 
-/* NAVIGATION ITEMS */
+.filter-info {
+    padding: 0.5rem 1.5rem;
+    font-size: 0.75rem;
+    color: var(--accent);
+    font-style: italic;
+    background: rgba(0, 0, 0, 0.15);
+}
+
+/* LIST */
 #recipe-list {
     list-style: none;
     overflow-y: auto;
@@ -120,7 +128,7 @@ body {
     opacity: 0.5;
 }
 
-/* --- RESIZER --- */
+/* RESIZER */
 .resizer {
     width: 6px;
     cursor: col-resize;
@@ -140,7 +148,7 @@ body {
     user-select: none;
 }
 
-/* --- CONTENT AREA --- */
+/* CONTENT & TAGS */
 .content {
     flex-grow: 1;
     overflow-y: auto;
@@ -148,7 +156,6 @@ body {
     scroll-behavior: smooth;
 }
 
-/* WELCOME SCREEN (IMAGE SIZE FIX HERE) */
 .welcome-screen {
     display: flex;
     flex-direction: column;
@@ -161,9 +168,7 @@ body {
 .welcome-image-container {
     width: 100%;
     max-width: 450px;
-    /* Reduced from 600px */
     max-height: 350px;
-    /* Added height constraint */
     margin-bottom: 2rem;
     border-radius: 12px;
     overflow: hidden;
@@ -177,7 +182,6 @@ body {
     animation: scaleIn 1s ease-out;
 }
 
-/* RECIPE DETAILS */
 .recipe-details-container {
     max-width: 900px;
     margin: 2rem auto;
@@ -205,12 +209,28 @@ body {
 }
 
 .tag {
+    display: inline-block;
     background: var(--accent-light);
     color: var(--accent);
     padding: 4px 12px;
     border-radius: 4px;
     font-weight: bold;
     margin-right: 5px;
+    cursor: pointer;
+    transition: 0.2s;
+    border: 1px solid transparent;
+}
+
+.tag:hover {
+    background: var(--accent);
+    color: white;
+    transform: translateY(-1px);
+}
+
+.tag.active-filter {
+    background: var(--accent);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .recipe-body {
@@ -235,7 +255,6 @@ body {
     line-height: 1.6;
 }
 
-/* --- ANIMATIONS --- */
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -272,7 +291,6 @@ body {
     }
 }
 
-/* --- MOBILE --- */
 @media (max-width: 768px) {
     body {
         flex-direction: column;
@@ -283,7 +301,7 @@ body {
         width: 100%;
         min-width: 100%;
         height: auto;
-        max-height: 40vh;
+        max-height: 45vh;
     }
 
     .resizer {
@@ -311,19 +329,5 @@ body {
     .recipe-header {
         flex-direction: column;
         text-align: center;
-        gap: 1.5rem;
-    }
-
-    .recipe-body {
-        flex-direction: column;
-    }
-
-    .recipe-details-container {
-        padding: 2rem 1.5rem;
-        margin: 1rem 0;
-    }
-
-    .welcome-image-container {
-        max-width: 280px;
     }
 }

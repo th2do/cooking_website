@@ -1,9 +1,17 @@
+const TAGS = {
+    SEAFOOD: "Seafood",
+    QUICK: {
+        SHORT: "15-30 min"
+    },
+    ITALIAN: "Italian"
+};
+
 const recipeDB = {
     "salmon": {
         title: "Honey Glazed Salmon",
         description: "A quick, sweet, and savory dish, perfect for a busy week night meal.",
         image: "honey_garlic_salmon.jpg",
-        tags: ["Seafood", "Quick", "5-Ingredients"],
+        tags: [TAGS.SEAFOOD, TAGS.QUICK.SHORT],
         ingredients: [
             "Salmon Fillets",
             "Salt",
@@ -26,7 +34,7 @@ const recipeDB = {
         title: "Italian Spaghetti",
         description: "A flavourful, simple Italian recipe for a week night",
         image: "spaghetti.jpg",
-        tags: ["Italian", "Quick", "Delicious"],
+        tags: [TAGS.ITALIAN, TAGS.QUICK.SHORT],
         ingredients: [
             "Spaghetti",
             "Lean Ground Beef",
